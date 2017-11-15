@@ -20,4 +20,12 @@ abstract public class GraphicsObject {
     abstract public String toString();
 
     private int m_ID;
+
+    public boolean isGroup(){
+        return false;
+    }
+
+    public int size() {
+        return 1;
+    }
 }
