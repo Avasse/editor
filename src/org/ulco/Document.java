@@ -17,28 +17,6 @@ public class Document {
         parseLayers(str.substring(layersIndex + 8, endIndex));
     }
 
-    public Document(Point origin, int line, int column, double length) {
-        m_layers = new Vector<Layer>();
-
-        Layer layer = createLayer();
-
-        for (int indexX = 0; indexX < column; ++indexX) {
-            for (int indexY = 0; indexY < line; ++indexY) {
-                layer.add(new Square(new Point(origin.getX() + indexX * length, origin.getY() + indexY * length), length));
-            }
-        }
-    }
-
-    public Document(Point center, int number, double radius, double delta) {
-        m_layers = new Vector<Layer>();
-
-        Layer layer = createLayer();
-
-        for (int index = 0; index < number; ++index) {
-            layer.add(new Circle(center, radius + index * delta));
-        }
-    }
-
     public Layer createLayer() {
         Layer layer = new Layer();
 
