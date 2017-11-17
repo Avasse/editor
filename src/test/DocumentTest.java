@@ -8,18 +8,20 @@ public class DocumentTest extends TestCase {
 
     @Test
     public void testSelect() throws Exception {
+        Utils utils = new Utils();
         Document document = new Document();
         Layer layer = document.createLayer();
         Circle c = new Circle(new Point(2, 8), 10);
 
         layer.add(c);
 
-        assertTrue(document.select(new Point(1,1), 8).size() == 1);
-        assertTrue(document.select(new Point(1,1), 8).firstElement().getID() == c.getID());
+        assertTrue(utils.select(new Point(1,1), 8, document).size() == 1);
+        assertTrue(utils.select(new Point(1,1), 8, document).firstElement().getID() == c.getID());
     }
 
     @Test
     public void testSelect2() throws Exception {
+        Utils utils = new Utils();
         Document document = new Document();
         Layer layer = document.createLayer();
         Circle c = new Circle(new Point(2, 8), 10);
@@ -28,7 +30,7 @@ public class DocumentTest extends TestCase {
         layer.add(c);
         layer.add(s);
 
-        assertTrue(document.select(new Point(1,1), 8).size() == 2);
+        assertTrue(utils.select(new Point(1,1), 8, document).size() == 2);
     }
 
     @Test
@@ -46,9 +48,9 @@ public class DocumentTest extends TestCase {
         l2.add(r);
         l2.add(c2);
         assertEquals(document.toJson(), "{ type: document, layers: { { type: layer, objects : { { type: square, center: " +
-                "{ type: point, x: 0.0, y: 0.0 }, length: 5.0 }, { type: circle, center: { type: point, x: 5.0, y: 5.0 }" +
-                ", radius: 4.0 } } }, { type: layer, objects : { { type: rectangle, center: { type: point, x: -5.0, y: 1.0 }" +
-                ", height: 4.0, width: 2.0 }, { type: circle, center: { type: point, x: -4.0, y: 8.0 }, radius: 1.0 } } } } }");
+                "{ type: point, x: 0.0, y: 0.0 }, length: 5.0 }, { type: circle, center: { type: point, x: 5.0, y: 5.0 }, radius: 4.0 } }, " +
+                "groups : {  } }, { type: layer, objects : { { type: rectangle, center: { type: point, x: -5.0, y: 1.0 }, height: 4.0, width: 2.0 }, " +
+                "{ type: circle, center: { type: point, x: -4.0, y: 8.0 }, radius: 1.0 } }, groups : {  } } } }");
     }
 
     @Test
@@ -65,10 +67,9 @@ public class DocumentTest extends TestCase {
         l1.add(c1);
         l2.add(r);
         l2.add(c2);
-        assertEquals(document.toJson(), "{ type: document, layers: { { type: layer, objects : { { type: square, center: " +
-                "{ type: point, x: 0.0, y: 0.0 }, length: 5.0 }, { type: circle, center: { type: point, x: 5.0, y: 5.0 }" +
-                ", radius: 4.0 } } }, { type: layer, objects : { { type: rectangle, center: { type: point, x: -5.0, y: 1.0 }" +
-                ", height: 4.0, width: 2.0 }, { type: circle, center: { type: point, x: -4.0, y: 8.0 }, radius: 1.0 } } } } }");
+        assertEquals(document.toJson(), "{ type: document, layers: { { type: layer, objects : { { type: square, center: { type: point, x: 0.0, y: 0.0 }, length: 5.0 }," +
+                " { type: circle, center: { type: point, x: 5.0, y: 5.0 }, radius: 4.0 } }, groups : {  } }, { type: layer, objects : { { type: rectangle, center: " +
+                "{ type: point, x: -5.0, y: 1.0 }, height: 4.0, width: 2.0 }, { type: circle, center: { type: point, x: -4.0, y: 8.0 }, radius: 1.0 } }, groups : {  } } } }");
     }
 
     @Test

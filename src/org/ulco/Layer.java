@@ -9,12 +9,14 @@ public class Layer {
     }
 
     public Layer(String json) {
-        m_list= new Vector<GraphicsObject>();
+        m_list = new Vector<GraphicsObject>();
         String str = json.replaceAll("\\s+","");
         int objectsIndex = str.indexOf("objects");
+        int groupsIndex = str.indexOf("groups");
         int endIndex = str.lastIndexOf("}");
 
-        parseObjects(str.substring(objectsIndex + 9, endIndex - 1));
+        parseObjects(str.substring(objectsIndex + 9, groupsIndex - 2));
+        parseGroups(str.substring(groupsIndex + 8, endIndex - 1));
     }
 
     public void add(GraphicsObject o) {
@@ -31,6 +33,22 @@ public class Layer {
 
     public int getID() {
         return m_ID;
+    }
+
+    public void move(Point delta) {
+        Group g = new Group();
+
+        for (GraphicsObject o : m_list) {
+            o.move(delta);
+        }
+    }
+
+    public int size() {
+        int size = 0;
+        for (GraphicsObject o : m_list) {
+            size += o.size();
+        }
+        return size;
     }
 
     private void parseObjects(String objectsStr) {
@@ -50,6 +68,29 @@ public class Layer {
                 objectsStr = objectsStr.substring(separatorIndex + 1);
             }
         }
+    }
+
+    private void parseGroups(String groupsStr) {
+        while (!groupsStr.isEmpty()) {
+            int separatorIndex = searchSeparator(groupsStr);
+            String groupStr;
+
+            if (separatorIndex == -1) {
+                groupStr = groupsStr;
+            } else {
+                groupStr = groupsStr.substring(0, separatorIndex);
+            }
+            m_list.add(JSON.parseGroup(groupStr));
+            if (separatorIndex == -1) {
+                groupsStr = "";
+            } else {
+                groupsStr = groupsStr.substring(separatorIndex + 1);
+            }
+        }
+    }
+
+    public Vector<GraphicsObject> getM_list() {
+        return m_list;
     }
 
     private int searchSeparator(String str) {
@@ -77,30 +118,41 @@ public class Layer {
         }
     }
 
-    public GraphicsObjects select(Point pt, double distance) {
-        GraphicsObjects list = new GraphicsObjects();
-
-        for (GraphicsObject object : m_list) {
-            if (object.isClosed(pt, distance)) {
-                list.add(object);
-            }
-        }
-        return list;
-    }
-
     public String toJson() {
         String str = "{ type: layer, objects : { ";
 
         for (int i = 0; i < m_list.size(); ++i) {
             GraphicsObject element = m_list.elementAt(i);
 
-            str += element.toJson();
-            if (i < m_list.size() - 1) {
-                str += ", ";
+            if (!element.isGroup()) {
+                str += element.toJson();
+                if (i < m_list.size() - 1) {
+                    str += ", ";
+                }
+            }
+        }
+
+        str += " }, groups : { ";
+
+        for (int i = 0; i < m_list.size(); ++i) {
+            GraphicsObject element = m_list.elementAt(i);
+            if (element.isGroup()) {
+                str += element.toJson();
             }
         }
         return str + " } }";
     }
+
+    public int countObjects(){
+        int size = 0;
+        for (GraphicsObject o : m_list) {
+            if (!o.isGroup()) {
+                size++;
+            }
+        }
+        return size;
+    }
+
 
     private Vector<GraphicsObject> m_list;
     private int m_ID;
