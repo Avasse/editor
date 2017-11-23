@@ -1,5 +1,6 @@
 package org.ulco;
 
+import java.util.List;
 import java.util.Vector;
 
 public final class Utils {
@@ -50,6 +51,48 @@ public final class Utils {
         return doc;
     }
 
+    public Vector<GraphicsObject> parseObjects(String objectsStr, Vector<GraphicsObject> list) {
+        while (!objectsStr.isEmpty()) {
+            Utils utils = new Utils();
+            int separatorIndex = utils.searchSeparator(objectsStr);
+            String objectStr;
+
+            if (separatorIndex == -1) {
+                objectStr = objectsStr;
+            } else {
+                objectStr = objectsStr.substring(0, separatorIndex);
+            }
+            list.add(JSON.parse(objectStr));
+            if (separatorIndex == -1) {
+                objectsStr = "";
+            } else {
+                objectsStr = objectsStr.substring(separatorIndex + 1);
+            }
+        }
+        return list;
+    }
+
+    public Vector<GraphicsObject> parseGroups(String groupsStr, Vector<GraphicsObject> list) {
+        while (!groupsStr.isEmpty()) {
+            Utils utils = new Utils();
+            int separatorIndex = utils.searchSeparator(groupsStr);
+            String groupStr;
+
+            if (separatorIndex == -1) {
+                groupStr = groupsStr;
+            } else {
+                groupStr = groupsStr.substring(0, separatorIndex);
+            }
+            list.add(JSON.parseGroup(groupStr));
+            if (separatorIndex == -1) {
+                groupsStr = "";
+            } else {
+                groupsStr = groupsStr.substring(separatorIndex + 1);
+            }
+        }
+        return list;
+    }
+
     public int searchSeparator(String str) {
         int index = 0;
         int level = 0;
@@ -73,5 +116,10 @@ public final class Utils {
         } else {
             return -1;
         }
+    }
+
+    public boolean isClosed(Point center, Point pt, double distance) {
+        return Math.sqrt((center.getX() - pt.getX()) * (center.getX() - pt.getX()) +
+                ((center.getY() - pt.getY()) * (center.getY() - pt.getY()))) <= distance;
     }
 }

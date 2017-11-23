@@ -24,9 +24,8 @@ public class Square extends GraphicsObject {
 
     public boolean isClosed(Point pt, double distance) {
         Point center = new Point(m_origin.getX() + m_length / 2, m_origin.getY() + m_length / 2);
-
-        return Math.sqrt((center.getX() - pt.getX()) * (center.getX() - pt.getX()) +
-                ((center.getY() - pt.getY()) * (center.getY() - pt.getY()))) <= distance;
+        Utils utils = new Utils();
+        return utils.isClosed(center, pt, distance);
     }
 
     void move(Point delta) { m_origin.move(delta); }

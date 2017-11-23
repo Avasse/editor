@@ -57,43 +57,17 @@ public class Group extends GraphicsObject {
     }
 
     private void parseGroups(String groupsStr) {
-        while (!groupsStr.isEmpty()) {
-            Utils utils = new Utils();
-            int separatorIndex = utils.searchSeparator(groupsStr);
-            String groupStr;
-
-            if (separatorIndex == -1) {
-                groupStr = groupsStr;
-            } else {
-                groupStr = groupsStr.substring(0, separatorIndex);
-            }
-            m_objectList.add(JSON.parseGroup(groupStr));
-            if (separatorIndex == -1) {
-                groupsStr = "";
-            } else {
-                groupsStr = groupsStr.substring(separatorIndex + 1);
-            }
-        }
+        Utils utils = new Utils();
+        setM_objectList(utils.parseGroups(groupsStr, m_objectList));
     }
 
     private void parseObjects(String objectsStr) {
-        while (!objectsStr.isEmpty()) {
-            Utils utils = new Utils();
-            int separatorIndex = utils.searchSeparator(objectsStr);
-            String objectStr;
+        Utils utils = new Utils();
+        setM_objectList(utils.parseObjects(objectsStr, m_objectList));
+    }
 
-            if (separatorIndex == -1) {
-                objectStr = objectsStr;
-            } else {
-                objectStr = objectsStr.substring(0, separatorIndex);
-            }
-            m_objectList.add(JSON.parse(objectStr));
-            if (separatorIndex == -1) {
-                objectsStr = "";
-            } else {
-                objectsStr = objectsStr.substring(separatorIndex + 1);
-            }
-        }
+    public void setM_objectList(Vector<GraphicsObject> m_objectList) {
+        this.m_objectList = m_objectList;
     }
 
     @Override

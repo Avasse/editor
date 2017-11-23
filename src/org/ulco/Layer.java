@@ -52,47 +52,21 @@ public class Layer {
     }
 
     private void parseObjects(String objectsStr) {
-        while (!objectsStr.isEmpty()) {
-            Utils utils = new Utils();
-            int separatorIndex = utils.searchSeparator(objectsStr);
-            String objectStr;
-
-            if (separatorIndex == -1) {
-                objectStr = objectsStr;
-            } else {
-                objectStr = objectsStr.substring(0, separatorIndex);
-            }
-            m_list.add(JSON.parse(objectStr));
-            if (separatorIndex == -1) {
-                objectsStr = "";
-            } else {
-                objectsStr = objectsStr.substring(separatorIndex + 1);
-            }
-        }
+        Utils utils = new Utils();
+        setM_list(utils.parseObjects(objectsStr, m_list));
     }
 
     private void parseGroups(String groupsStr) {
-        while (!groupsStr.isEmpty()) {
-            Utils utils = new Utils();
-            int separatorIndex = utils.searchSeparator(groupsStr);
-            String groupStr;
-
-            if (separatorIndex == -1) {
-                groupStr = groupsStr;
-            } else {
-                groupStr = groupsStr.substring(0, separatorIndex);
-            }
-            m_list.add(JSON.parseGroup(groupStr));
-            if (separatorIndex == -1) {
-                groupsStr = "";
-            } else {
-                groupsStr = groupsStr.substring(separatorIndex + 1);
-            }
-        }
+        Utils utils = new Utils();
+        setM_list(utils.parseGroups(groupsStr, m_list));
     }
 
     public Vector<GraphicsObject> getM_list() {
         return m_list;
+    }
+
+    public void setM_list(Vector<GraphicsObject> m_list) {
+        this.m_list = m_list;
     }
 
     public String toJson() {
