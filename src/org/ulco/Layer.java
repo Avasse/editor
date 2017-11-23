@@ -70,40 +70,9 @@ public class Layer {
     }
 
     public String toJson() {
-        String str = "{ type: layer, objects : { ";
-
-        for (int i = 0; i < m_list.size(); ++i) {
-            GraphicsObject element = m_list.elementAt(i);
-
-            if (!element.isGroup()) {
-                str += element.toJson();
-                if (i < m_list.size() - 1) {
-                    str += ", ";
-                }
-            }
-        }
-
-        str += " }, groups : { ";
-
-        for (int i = 0; i < m_list.size(); ++i) {
-            GraphicsObject element = m_list.elementAt(i);
-            if (element.isGroup()) {
-                str += element.toJson();
-            }
-        }
-        return str + " } }";
+        Utils utils = new Utils();
+        return utils.toJSON(true, m_list);
     }
-
-    public int countObjects(){
-        int size = 0;
-        for (GraphicsObject o : m_list) {
-            if (!o.isGroup()) {
-                size++;
-            }
-        }
-        return size;
-    }
-
 
     private Vector<GraphicsObject> m_list;
     private int m_ID;

@@ -1,6 +1,5 @@
 package org.ulco;
 
-import java.util.List;
 import java.util.Vector;
 
 public final class Utils {
@@ -121,5 +120,67 @@ public final class Utils {
     public boolean isClosed(Point center, Point pt, double distance) {
         return Math.sqrt((center.getX() - pt.getX()) * (center.getX() - pt.getX()) +
                 ((center.getY() - pt.getY()) * (center.getY() - pt.getY()))) <= distance;
+    }
+
+    public String toJSON (boolean layer, Vector<GraphicsObject> list) {
+        if (layer) {
+            String str = "{ type: layer, objects : { ";
+
+            for (int i = 0; i < list.size(); ++i) {
+                GraphicsObject element = list.elementAt(i);
+
+                if (!element.isGroup()) {
+                    str += element.toJson();
+                    if (i < list.size() - 1) {
+                        str += ", ";
+                    }
+                }
+            }
+
+            str += " }, groups : { ";
+
+            for (int i = 0; i < list.size(); ++i) {
+                GraphicsObject element = list.elementAt(i);
+                if (element.isGroup()) {
+                    str += element.toJson();
+                }
+            }
+            return str + " } }";
+        } else {
+            String str = "{ type: group, objects : { ";
+
+            for (int i = 0; i < list.size(); ++i) {
+                GraphicsObject element = list.elementAt(i);
+                int nbObjects = this.countObjects(list);
+                if (!element.isGroup()) {
+                    str += element.toJson();
+                    if (i < nbObjects - 1) {
+                        str += ", ";
+                    }
+                }
+                if (!element.isGroup()) {
+
+                }
+            }
+            str += " }, groups : { ";
+
+            for (int i = 0; i < list.size(); ++i) {
+                GraphicsObject element = list.elementAt(i);
+                if (element.isGroup()) {
+                    str += element.toJson();
+                }
+            }
+            return str + " } }";
+        }
+    }
+
+    public int countObjects(Vector<GraphicsObject> list){
+        int size = 0;
+        for (GraphicsObject o : list) {
+            if (!o.isGroup()) {
+                size++;
+            }
+        }
+        return size;
     }
 }

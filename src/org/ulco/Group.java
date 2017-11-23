@@ -80,38 +80,18 @@ public class Group extends GraphicsObject {
     }
 
     public String toJson() {
-        String str = "{ type: group, objects : { ";
-
-        for (int i = 0; i < m_objectList.size(); ++i) {
-            GraphicsObject element = m_objectList.elementAt(i);
-            int nbObjects = countObjects();
-            if (!element.isGroup()) {
-                str += element.toJson();
-                if (i < nbObjects - 1) {
-                    str += ", ";
-                }
-            }
-            if (!element.isGroup()) {
-
-            }
-        }
-        str += " }, groups : { ";
-
-        for (int i = 0; i < m_objectList.size(); ++i) {
-            GraphicsObject element = m_objectList.elementAt(i);
-            if (element.isGroup()) {
-                str += element.toJson();
-            }
-        }
-        return str + " } }";
+        Utils utils = new Utils();
+        return utils.toJSON(false, m_objectList);
     }
 
     public String toString() {
+        Utils utils = new Utils();
+
         String str = "group[[";
 
         for (int i = 0; i < m_objectList.size(); ++i) {
             GraphicsObject element = m_objectList.elementAt(i);
-            int nbObject = countObjects();
+            int nbObject = utils.countObjects(m_objectList);
             if (!element.isGroup()) {
                 str += element.toString();
                 if (i < nbObject - 1) {
@@ -128,16 +108,6 @@ public class Group extends GraphicsObject {
             }
         }
         return str + "]]";
-    }
-
-    public int countObjects(){
-        int size = 0;
-        for (GraphicsObject o : m_objectList) {
-            if (!o.isGroup()) {
-                size++;
-            }
-        }
-        return size;
     }
 
     private Vector<GraphicsObject> m_objectList;

@@ -23,8 +23,8 @@ public class Circle extends GraphicsObject {
     public Point getCenter() { return m_center; }
 
     public boolean isClosed(Point pt, double distance) {
-        return Math.sqrt((m_center.getX() - pt.getX()) * (m_center.getX() - pt.getX()) +
-                ((m_center.getY() - pt.getY()) * (m_center.getY() - pt.getY()))) <= distance;
+        Utils utils = new Utils();
+        return utils.isClosed(m_center, pt, distance);
     }
 
     void move(Point delta) { m_center.move(delta); }
